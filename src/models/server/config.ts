@@ -10,6 +10,7 @@ client
     .setKey(env.appwrite.apiKey) // Your secret API key
 ;
 
+console.log(env.appwrite.endpoint)
 const databases = new Databases(client);
 const avatars = new Avatars(client);
 const users = new Users(client);

@@ -3,7 +3,7 @@ import env from "@/app/env";
 import { Client, Account , Avatars , Databases , Storage } from "appwrite";
 
 const client = new Client()
-    .setEndpoint(env.appwrite.endpoint); 
+    .setEndpoint(env.appwrite.endpoint) 
     .setProject(env.appwrite.projectId); 
 
 const databases = new Databases(client);

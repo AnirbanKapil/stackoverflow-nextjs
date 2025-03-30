@@ -59,7 +59,7 @@ export const useAuthStore = create<IAuthStore>()(
                 }
             },
 
-            async login(email, password) {
+            async login(email : string, password : string) {
                 try {
                     const session = await account.createEmailPasswordSession(email,password)
                     const [user , {jwt}] = await Promise.all([account.get<UserPrefs>(),account.createJWT()])
@@ -67,18 +67,39 @@ export const useAuthStore = create<IAuthStore>()(
                     if(!user.prefs?.reputation) 
                         await account.updatePrefs<UserPrefs>({reputation : 0})
 
-                    set({session,user,jwt})   
+                    set({session,user,jwt}) 
+                    
+                    return ({success : true})
                 } catch (error) {
                     console.log(error)
+
+                    return {
+                        success : false,
+                        error : error instanceof AppwriteException ? error : null
+                    }
                 }
             },
 
-            async createAccount(name, email, password) {
-                
+            async createAccount(name : string, email : string, password : string) {
+                try {
+                   await account.create(ID.unique(),email,password,name)
+                   return {success : true} 
+                } catch (error) {
+                    console.log(error)
+                    return {
+                        success : false,
+                        error : error instanceof AppwriteException ? error : null
+                    }
+                }  
             },
 
-            logout() {
-                
+            async logout() {
+                try {
+                   await account.deleteSessions()
+                   set({session : null,jwt : null,user : null})  
+                } catch (error) {
+                    console.log(error)
+                }
             },
 
         })),

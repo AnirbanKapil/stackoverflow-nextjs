@@ -17,6 +17,7 @@ function RegisterPage() {
     
     if(!firstname || !lastname || !email || !password){
        setError(()=>"Please fill out all the fields")
+       return
     }
     
     setLoading(true);

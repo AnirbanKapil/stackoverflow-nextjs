@@ -1,3 +1,5 @@
+"use client"
+
 import { useAuthStore } from '@/store/Auth'
 import React from 'react'
 
@@ -43,7 +45,10 @@ function RegisterPage() {
   }
   
   return (
-    <div>RegisterPage</div>
+    <div>
+      {error && <p>{error}</p>}
+      <form></form>
+    </div>
   )
 }
 

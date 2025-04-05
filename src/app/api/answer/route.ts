@@ -40,7 +40,7 @@ export async function POST (request : NextRequest) {
 }
 
 
-export default async function DELETE (request : NextRequest) {
+export async function DELETE (request : NextRequest) {
     try {
       const {answerId} = await request.json()
       

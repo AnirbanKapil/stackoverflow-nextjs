@@ -38,3 +38,44 @@ export async function POST (request : NextRequest) {
         )
     }
 }
+
+
+export default async function DELETE (request : NextRequest) {
+    try {
+      const {answerId} = await request.json()
+      
+      const answer = await databases.getDocument(db,answerCollection,answerId)
+
+      if(!answer){
+        return NextResponse.json({
+            message : "Unable to find answer"
+        })
+      }
+
+      const response = await databases.deleteDocument(db,answerCollection,answerId)
+
+    //   decrease reputation
+
+      const prefs = await users.getPrefs<UserPrefs>(answer.authorId) 
+      await users.updatePrefs(answer.authorId,{
+        reputation : Number(prefs.reputation) - 1
+      })
+
+      return NextResponse.json(
+        {data : response},
+        {status : 200}
+      )
+
+
+    } catch (error : any) {
+        return NextResponse.json(
+            {
+                message : error?.message || "Error deleting answer" 
+            },
+            {
+                status : error?.status || error?.code || 500
+                
+            }
+        ) 
+    }
+}
